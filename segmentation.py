@@ -52,14 +52,14 @@ test_ids = next(os.walk(TEST_PATH))[1]
 
 # Creo un arreglo que contenga todos los datos
 # Datos de entrenamiento
-x_train = np.zeros((len(train_ids)*IMG_CHANELS*4, IMG_WIDTH, IMG_HEIGHT, 1), dtype=np.float32)
+x_train = np.zeros((len(train_ids)*IMG_CHANELS*1, IMG_WIDTH, IMG_HEIGHT, 1), dtype=np.float32)
 
 plt.show()
 # Anotaciones de entrenamiento
-y_train = np.zeros((len(train_ids)*IMG_CHANELS*4, IMG_WIDTH, IMG_HEIGHT, 1), dtype=np.bool)
+y_train = np.zeros((len(train_ids)*IMG_CHANELS*1, IMG_WIDTH, IMG_HEIGHT, 1), dtype=np.bool)
 
 print('Ajustando tamano de imagenes y las mascaras de entrenamiento')
-modalidades = ['_t1.nii.gz', '_t1ce.nii.gz', '_t2.nii.gz', '_flair.nii.gz']
+modalidades = ['_t1.nii.gz']
 #modalidades = ['_t1.nii.gz', '_t1ce.nii.gz', '_t2.nii.gz', '_flair.nii.gz']
 
 # Voy a recorrer cada id y genero una barra de progreso
@@ -97,8 +97,8 @@ for n, id_ in tqdm(enumerate(train_ids), total = len(train_ids)):
 
 # PARA TEST
 
-x_test = np.zeros((len(test_ids)*IMG_CHANELS*4, IMG_WIDTH, IMG_HEIGHT, 1), dtype=np.float32)
-y_test= np.zeros((len(test_ids)*IMG_CHANELS*4, IMG_WIDTH, IMG_HEIGHT, 1), dtype=np.bool)
+x_test = np.zeros((len(test_ids)*IMG_CHANELS*1, IMG_WIDTH, IMG_HEIGHT, 1), dtype=np.float32)
+y_test= np.zeros((len(test_ids)*IMG_CHANELS*1, IMG_WIDTH, IMG_HEIGHT, 1), dtype=np.bool)
 print('Ajustando tamano de imagenes de test y anotaciones')
 
 cont_img = 0
@@ -196,7 +196,7 @@ model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy']
 model.summary()
 
 # Para hallar las predicciones
-batch_s = 5
+batch_s = 3
 max_epoch = 4
 
 # 1) Guardo el mejor modelo
@@ -210,13 +210,13 @@ results = model.fit(x_train,y_train, validation_split = 0.1, batch_size = batch_
 # EVALUACIÓN DEL MODELO
 
 preds_test = model.predict(x_test, verbose=1)
-preds_test_t = (preds_test>0.2).astype(np.uint8)
+preds_test_t = (preds_test>0.012).astype(np.uint8)
 
-imshow(x_test[100,:,:,0], cmap='gray')
+imshow(x_test[800,:,:,0], cmap='gray')
 plt.show()
-imshow((y_test[100,:,:,0]))
+imshow((y_test[800,:,:,0]))
 plt.show()
-imshow(preds_test_t[100,:,:,0], cmap='gray')
+imshow(preds_test_t[800,:,:,0], cmap='gray')
 plt.show()
 
 #----------------------------------------------------------------------------------------s
