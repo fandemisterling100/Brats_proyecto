@@ -210,7 +210,7 @@ results = model.fit(x_train,y_train, validation_split = 0.1, batch_size = batch_
 # EVALUACIÓN DEL MODELO
 
 preds_test = model.predict(x_test, verbose=1)
-preds_test_t = (preds_test>0.012).astype(np.uint8)
+preds_test_t = (preds_test>0.39).astype(np.uint8)
 
 imshow(x_test[800,:,:,0], cmap='gray')
 plt.show()
@@ -223,7 +223,8 @@ plt.show()
 # METRICA
 dice = np.sum(preds_test_t[y_test==1])*2.0 / (np.sum(preds_test_t) + np.sum(y_test))
 print ('Dice similarity score is: ' + format(dice))
-
+# 22.7 con 0.4
+# 22.8 con 0.39
 # ------------------------------------------------------------------------------------
 # CAMBIOS PARA AGREGAR:
 
@@ -232,3 +233,23 @@ print ('Dice similarity score is: ' + format(dice))
 # Como extraer el accuracy del modelo despues de realizar las predicciones en test
 # Guardar modelo
 # Intentar manejarlo como una imagen RGB para este caso, donde cada canal sea un slide de una modalidad diferente (se ignoraria una modalidad)
+
+################################
+
+
+preds_train = model.predict(x_train, verbose=1)
+preds_train_t = (preds_train>0.1).astype(np.uint8)
+
+imshow(x_train[800,:,:,0], cmap='gray')
+plt.show()
+imshow((y_train[800,:,:,0]))
+plt.show()
+imshow(preds_train_t[800,:,:,0], cmap='gray')
+plt.show()
+
+#----------------------------------------------------------------------------------------s
+# METRICA
+dice = np.sum(preds_train_t[y_train==1])*2.0 / (np.sum(preds_train_t) + np.sum(y_train))
+print ('Dice similarity score is: ' + format(dice))
+
+# 41.42 con 0.39
